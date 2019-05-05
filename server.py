@@ -5,6 +5,7 @@ import sys
 from threading import Thread
 
 class communication:
+    connections=[]
     def __init__(self, *args, **kwargs):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_address = ('localhost', 10000)
@@ -18,37 +19,33 @@ class communication:
         except:
             pass
     
+    
     def acceptConnections(self):
     
         self.conn,self.addr = self.s.accept()
-        #print("Connected")
-        self.conn.settimeout(0.010)
-                
-    def sendData(self,message):
-        try:
-            self.conn.sendall(message.encode('ascii'))
+        thread1 = Thread(target=self.sendData)
+        thread1.daemon=True
+        thread1.start()
+        self.connections.append(self.conn)
         
-        except:
-            pass
-    def recieveData(self,message):
+    def sendData(self):
+            
+             
+            while True:
+                self.data=input("Enter Message: ")
+                self.conn.send(bytes(self.data,'utf-8'))
+                    
+    
+    def recieveData(self):
         
-        try:
-            self.data = self.conn.recv(16)
-        except:
-            pass
-    def closeConnection(self):
+        while True:
+            self.data = self.s.recv(1024)
+            self.data=self.data.decode('ascii')
+            if not self.data:
+                break
         self.conn.close()
 
 a=communication()
 a.server()
-
 while True:
-    
-    thread1 = Thread(target=a.acceptConnections, args=()).start() 
-        
-    try:  
-        data = input("Enter Message:")
-        a.sendData(data) 
-
-    except:
-        break;
+    a.acceptConnections()   

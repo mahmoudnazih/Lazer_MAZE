@@ -24,13 +24,11 @@ class communication:
         except:
             pass
     def recieveData(self):
-        
-        try:
+        while True:
             self.data = self.s.recv(1024)
             self.data=self.data.decode('ascii')
-            
-        except:
-            pass
+            if not self.data:
+                break
         return self.data
     def closeServerConnection(self):
         self.conn.close()
@@ -40,11 +38,6 @@ class communication:
 a=communication()
 a.client()
 while True:
-    try:
-        data=a.recieveData()
-        if not data:
-            break
-        print(data)
-    except:
-        a.closeClientConnection()
+            data = a.recieveData()
+            print(data)
 
