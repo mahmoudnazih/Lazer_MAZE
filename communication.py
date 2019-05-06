@@ -1,8 +1,14 @@
+import socket
+import select
+import threading
+import sys
+port = 5005
+address = "localhost"
 class Server:
     connections=[]
     sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     def __init__(self):
-        self.sock.bind(("localhost",5050))
+        self.sock.bind((address,port))
         self.sock.listen(1)
         inputs=[self.sock]
 
@@ -24,10 +30,11 @@ class Server:
 
 class Client:
     sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    def __init__(self,"localhost"):
-        self.sock.connect(("localhost",5050))
+    def __init__(self):
+        self.sock.connect((address,port))
+    def info(self):
         while True:
-            data = self.sock.recv(1024)
-            print(str(data,'utf-8'))
-            if not data:
+            self.data = self.sock.recv(1024)
+            return str(self.data,'utf-8')
+            if not self.data:
                 break
