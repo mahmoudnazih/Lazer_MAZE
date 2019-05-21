@@ -6,7 +6,7 @@ import random
 #Sound Class
 class Sound:
     def __init__(self):
-        self.sounds=["winSound.wav","errorSound.wav","gameSound.wav","loseSound.wav"]
+        self.sounds=["winSound.wav","errorSound.wav","gameSound.wav","loseSound.wav","success.wav"]
         
         
     #Plays the Buzzer Sound when a laser beam hits a player
@@ -28,6 +28,10 @@ class Sound:
     def loseSound(self):
         pygame.mixer.music.load(self.sounds[3])
         pygame.mixer.music.play(1)
+    
+    def pointsSound(self):
+        pygame.mixer.music.load(self.sounds[4])
+        pygame.mixer.music.play(1)
         
     #Pauses the Game Music
     def pause(self):
@@ -36,6 +40,8 @@ class Sound:
     #Unpauses the game Music
     def unpause(self):
         pygame.mixer.music.unpause()
+    def stopSound(self):
+        pygame.mixer.music.stop()
 
 #Laser Class
 class laserGroup:
@@ -52,20 +58,20 @@ class laserGroup:
         for i in range(len(self.LazerPins)):
             GPIO.setup(self.LazerPins[i],GPIO.OUT)
         
-    def turnOn(self,NumberOfLasers):         #Turns on #ofLasers in sequence
+    def turnOn(self,NumberOfLasers):         #Turns on # ofLasers in sequence
         for n in range(NumberOfLasers):
             GPIO.output(self.LazerPins[n],True)
     
-    def turnOff(self,NumberOfLasers):         #Turns off #ofLasers in sequence
+    def turnOff(self,NumberOfLasers):         #Turns off # ofLasers in sequence
         for n in range(NumberOfLasers):
             GPIO.output(self.LazerPins[n],False)
             
-    def randomTurnOn(self,NumberOfLasers):         #Turns on #ofLasers randomly
+    def randomTurnOn(self,NumberOfLasers):         #Turns on # ofLasers randomly
         for n in range(NumberOfLasers):
             GPIO.output(self.LazerPins[random.randrange(0, self.systemLasers, 1)],True)
         
-    def randomTurnOff(self):         #Turns off #ofLasers randomly
-        for n in range(NumberOfLasers,NumberOfLasers):
+    def randomTurnOff(self,NumberOfLasers):         #Turns off #ofLasers randomly
+        for n in range(NumberOfLasers):
             GPIO.output(self.LazerPins[random.randrange(0, self.systemLasers, 1)],False)
             
 #Sensors Class
@@ -97,6 +103,13 @@ class outputBtnGroup:
         self.ButtonPinsOUT = [self.Button1PinOUT,self.Button2PinOUT,self.Button3PinOUT,self.Button4PinOUT,self.Button5PinOUT]
         for i in range(len(self.ButtonPinsOUT)):
             GPIO.setup(self.ButtonPinsOUT[i],GPIO.OUT)
+    def setBtnHigh(self,noOfBtns):
+        for i in range(noOfBtns):
+            GPIO.output(self.ButtonPinsOut[i],True)
+    def setBtnLow(self,noOfBtns):
+        for i in range(noOfBtns):
+            GPIO.output(self.ButtonPinsOut[i],False)
+            
             
 #Output Buttons Class
 class inputBtnGroup:
@@ -109,6 +122,11 @@ class inputBtnGroup:
         self.ButtonPinsIN = [self.Button1PinIN,self.Button2PinIN,self.Button3PinIN,self.Button4PinIN,self.Button5PinIN]
         for i in range(len(self.ButtonPinsIN)):
             GPIO.setup(self.ButtonPinsIN[i],GPIO.IN)
+    def readBtn(self,NumberOfBtns):
+        btnsValues = [0,0,0,0,0]
+        for n in range(NumberOfBtns):
+            btnsValues[n] = GPIO.input(self.ButtonPinsIN[n])
+        return btnsValues
 
 class controlGroup:
     def __init__(self):
@@ -126,12 +144,19 @@ class controlGroup:
 
 class player():
     def __init__(self):
+        self.levelOneScore = 40
+        self.levelTwoScore = 60
+        self.levelThreeScore = 80
+        self.levelFourScore = 100
+        self.errors = 0
+    def decreaseScore(self,numberOfErrors):
         pass
-    def score():
+    def increaseScore(self):
         pass
-    def mistakes():
-        pass
-    def playTime():
+    def mistakes(self):
+        self.errors +=1 
+        return self.errors
+    def playTime(self):
         pass
 
 def generalSetup():
