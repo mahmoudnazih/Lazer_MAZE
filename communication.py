@@ -2,8 +2,8 @@ import socket
 import select
 import threading
 import sys
-port = 5005
-address = "localhost"
+port = 5005                     #Set the port you wish
+address = "localhost"           #Set to the ip address of the server
 
 class Server:
 
@@ -13,7 +13,7 @@ class Server:
     def __init__(self):
         self.sock.bind((address,port))
         self.sock.listen(1)
-        inputs=[self.sock]
+        self.inputs=[self.sock]
         self.c,self.a = self.sock.accept()
         self.connections.append(self.c)
         
@@ -24,13 +24,13 @@ class Server:
             for connection in self.connections:
                 try:
                     connection.sendall(data.encode('ascii'))
-                    self.cThread.join()
-                    self.iThread.join()
+                    
                     break
                     
                 except:
                     pass
             break
+            
     def run(self,msg):
         
         while True:
@@ -42,6 +42,7 @@ class Server:
                 cThread = threading.Thread(target=self.handler, args=(self.c,self.a,msg))
                 cThread.daemon=True
                 cThread.start()
+                
                 
                 break
             except:
@@ -70,13 +71,11 @@ class Client:
                 self.data = self.sock.recv(1024)
                 self.data = str(self.data,'utf-8')
                 return self.data
-                if not self.data:
-                    break
+                
             except:
                 self.sock.close()
                 self.sock.connect((address,port))
                 self.data = self.sock.recv(1024)
                 self.data = str(self.data,'utf-8')
                 return self.data
-                if not self.data:
-                    break
+
