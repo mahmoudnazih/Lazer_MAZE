@@ -141,6 +141,10 @@ class controlGroup:
         GPIO.setup(self.BuzzerPin,GPIO.OUT)
         GPIO.setup(self.celebPin,GPIO.OUT)
         GPIO.setup(self.WinPin,GPIO.IN)
+    def generalSetup(self):
+        pygame.init()
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setwarnings(False)
 
 class player():
     def __init__(self):
@@ -159,11 +163,7 @@ class player():
     def playTime(self):
         pass
 
-def generalSetup():
-    
-    pygame.init()
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setwarnings(False)
+
     
 def main_program():
     generalSetup()

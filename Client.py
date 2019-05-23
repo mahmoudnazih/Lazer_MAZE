@@ -31,8 +31,7 @@ outputBtn = outputBtnGroup()
 inputBtn = inputBtnGroup()
 control = controlGroup()
 playerOne = player()
-
-
+control.generalSetup()
 flag = False            #Used to begin the calculation of initial time
 while True:             # The Main program loop
     
