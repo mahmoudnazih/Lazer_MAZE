@@ -114,7 +114,7 @@ while True:             # The Main program loop
                     outputBtn.setBtnLow(3)      #otherwise LEDS are turned off
             else:
                 break
-                    
+              
         
 
 
