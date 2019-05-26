@@ -14,8 +14,8 @@ class Server:
         self.sock.bind((address,port))
         self.sock.listen(1)
         self.inputs=[self.sock]
-        self.c,self.a = self.sock.accept()
-        self.connections.append(self.c)
+        # self.c,self.a = self.sock.accept()
+        # self.connections.append(self.c)
         
 
     def handler(self,c,a,msg):

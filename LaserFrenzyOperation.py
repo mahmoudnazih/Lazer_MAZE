@@ -7,7 +7,7 @@ import random
 class Sound:
     def __init__(self):
         self.sounds=["winSound.wav","errorSound.wav","gameSound.wav","loseSound.wav","success.wav"]
-        
+        pygame.mixer.init()
         
     #Plays the Buzzer Sound when a laser beam hits a player
     def buzzer(self):
@@ -104,8 +104,8 @@ class outputBtnGroup:
         for i in range(len(self.ButtonPinsOUT)):
             GPIO.setup(self.ButtonPinsOUT[i],GPIO.OUT)
     def setBtnHigh(self,noOfBtns):
-        for i in range(noOfBtns):
-            GPIO.output(self.ButtonPinsOut[i],True)
+        for i in range(len(noOfBtns)):
+            GPIO.output(self.ButtonPinsOut[noOfBtns[i]],True)
     def setBtnLow(self,noOfBtns):
         for i in range(noOfBtns):
             GPIO.output(self.ButtonPinsOut[i],False)
@@ -123,9 +123,9 @@ class inputBtnGroup:
         for i in range(len(self.ButtonPinsIN)):
             GPIO.setup(self.ButtonPinsIN[i],GPIO.IN)
     def readBtn(self,NumberOfBtns):
-        btnsValues = [0,0,0,0,0]
-        for n in range(NumberOfBtns):
-            btnsValues[n] = GPIO.input(self.ButtonPinsIN[n])
+        btnsValues = []
+        for n in range(len(NumberOfBtns)):
+            btnsValues.append(GPIO.input(self.ButtonPinsIN[NumberOfBtns[n]]))
         return btnsValues
 
 class controlGroup:
@@ -145,6 +145,9 @@ class controlGroup:
         pygame.init()
         GPIO.setmode(GPIO.BOARD)
         GPIO.setwarnings(False)
+        
+    def makeBuzzer(self):
+        GPIO.output(self.BuzzerPin,True)
 
 class player():
     def __init__(self):
